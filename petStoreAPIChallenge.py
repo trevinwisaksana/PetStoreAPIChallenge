@@ -5,12 +5,6 @@ from flask import request
 # Imported JSON
 import json
 
-''' Create a simple Flask web server that receives GET requests
-    to the route `/hello` and responds with a friendly message.
-    Test this route in your web browser and using Curl, Postman,
-    or another tool to make HTTP requests.  '''
-
-
 ''' Creating an instance of Flask class.
     The first argument is the module
     or package name. '''
@@ -23,24 +17,37 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
-# Will contain list of JSON data
+
+# Contain list of JSON data
 listOfJSON = []
 
 
-# Challenge 3
+# Challenge 3 and 6
 @app.route('/pets', methods=['POST'])
 # POST request with JSON data in the body
 def pets():
     # input_json is a list of all the keys
     input_json = request.get_json(force=True)
+    name = input_json['name']
     # force=True, above, is important to not silently fail
     # Checking if the keys name, age and species exist.
-    if "name" in input_json.keys() and "age" in input_json.keys() and "species" in input_json.keys():
+    if 'name' in input_json.keys() and 'age' in input_json.keys() and 'species' in input_json.keys():
+        # Iterates through the listOfJSON
+        for i in listOfJSON:
+            if name == i['name']:
+                # If the name is the same, it will not allow the data to be added
+                return "HTTP 409 ERROR: NAME IS NOT UNIQUE"
         # Appends json data with type string to the listOfJSON
         listOfJSON.append(input_json)
         return "input_json appended to listOfJSON"
-    print("Error, could not append input_json to listOfJSON")
-    return "Something is wrong"
+    return "HTTP 409 Error."
+
+''' # Check if the key "name", "age" and "species" exist.
+    # If it exists, check if the value of the name is equal to any value of the name in the listOfJSON
+        # If a value of a name matches with any on the list
+            # Print "Error 404"
+        # If the name is not the same with any names
+            # Append the JSON data to the listOfJSON '''
 
 
 # Challege 4
@@ -64,7 +71,23 @@ def petNameGetRequest(name):
         if name == i["name"]:
             # Return the string version of that dictionary
             return json.dumps(i)
-    return "No name can be matched."
+    return "No names can be matched."
+
+
+# Challenge 7
+@app.route('/pets/<name>', methods=['PUT'])
+def replacePet(name):
+    # input_json is a list of all the keys
+    input_json = request.get_json(force=True)
+    # Iterates through the listOfJSON
+    numberOfElements = listOfJSON.count
+    # for i in listOfJSON:
+    for i in listOfJSON:
+        # Checks if any of the name matches any on the list
+        if name == i['name']:
+            listOfJSON.update(input_json)
+    return "HTTP 404 ERROR: NAME DOES NOT EXIST"
+
 
 if __name__ == '__main__':
     app.run(debug=True)
