@@ -27,8 +27,16 @@ class FlaskServerTest(unittest.TestCase):
         response = self.app.get('/hello')
         # Response status: Would fail if the value is not true
         assert response.status_code == 200, "status_code was not OK"
-        print(response.data.decode())
-        assert response.data.decode() == "Hello, World!"
+        print(response.data)
+        assert response.data == "Hello, World!"
+
+    def test_petRequest(self):
+        # Making a request to my local server
+        response = self.app.post('/pets')
+        # Response status: Would fail if the value is not True
+        assert response.status_code == 200, "status_code is OK"
+        # Assert is used to check if the value is the same or not.
+        assert response.data == ""
 
 
 if __name__ == '__main__':
