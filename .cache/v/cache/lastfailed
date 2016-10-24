@@ -1,4 +1,3 @@
 {
-  "unitTesting.py::FlaskServerTest::test_petGetRequset": true, 
   "unitTesting.py::FlaskServerTest::test_petRequest": true
 }

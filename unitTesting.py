@@ -26,17 +26,13 @@ class FlaskServerTest(unittest.TestCase):
         # Making a request to my local server
         response = self.app.get('/hello')
         # Response status: Would fail if the value is not true
-        assert response.status_code == 200, "status_code was not OK"
-        print(response.data)
         assert response.data == "Hello, World!"
 
     def test_petRequest(self):
         # Making a request to my local server
-        response = self.app.post('/pets')
-        # Response status: Would fail if the value is not True
-        assert response.status_code == 200, "status_code is OK"
-        # Assert is used to check if the value is the same or not.
-        assert response.data == ""
+        response = self.app.post('/pets/harambe')
+        # This is not working because the result does not return any string
+        self.assertEqual(server.petNameGetRequest("harambe"), "harambe")
 
 
 if __name__ == '__main__':
